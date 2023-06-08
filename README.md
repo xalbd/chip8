@@ -1,6 +1,12 @@
 # CHIP-8 Emulator
 
-Chip-8 is a very small interpreted programming language developed in the 70s. I'm writing this emulator as an exercise to further understand CPUs and improve my C++.
+Chip-8 is a very small interpreted programming language developed in the 70s. It's a simple language to emulate and is a nice exercise to understand how basic low-level principles work before moving on to creating more complex emulators.
+
+## Chip-8 Information
+
+Chip-8 has 16 16-bit general registers, 4kb of memory, interfaces through the user by placing sprites on a 64x32 monochrome screen and queries for input on a 16-key keypad.
+
+Every instruction in Chip-8 is two bytes long. Because Chip-8 is an interpreted language and not machine code, it is near-impossible to create a cycle-accurate emulation. Typically, each opcode is simply executed after a small delay in order to create roughly acccurate timings (as does this emulator).
 
 ## To-do List
 
@@ -22,6 +28,8 @@ Requires C++17, make, and ~~SDL2~~.
 $ make
 $ ./run
 ```
+
+The keys of the Chip-8, 0-9 and A-F are mapped to \_\_ for user interaction.
 
 ## References
 
