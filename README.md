@@ -1,6 +1,6 @@
 # CHIP-8 Emulator
 
-Chip-8 is a very small interpreted programming language developed in the 70s. It's a simple language to emulate and is a nice exercise to understand how basic low-level principles work before moving on to creating more complex emulators.
+Chip-8 is a very small interpreted programming language developed in the 70s. It is a simple language to emulate and is a good example of how a CPU works at a lower level.
 
 ## Chip-8 Information
 
@@ -19,6 +19,8 @@ Every instruction in Chip-8 is two bytes long. Because Chip-8 is an interpreted 
 - [ ] Add debugging mode (live dissasembly, registers, RAM)
 - [ ] Implement sound (coupled to main loop timing)
 - [ ] Slightly more accurate timings for opcodes
+- [ ] Toggles for differences in Chip-8 specifications/implementations
+- [ ] Illegal opcodes
 
 ## Compiling and Running
 
@@ -29,7 +31,9 @@ $ make
 $ ./run
 ```
 
-The keys of the Chip-8, 0-9 and A-F are mapped to \_\_ for user interaction.
+~~The keys of the Chip-8, 0-9 and A-F are mapped to \_\_ for user interaction.~~
+
+~~Open-source ROMs are included in this repository. To run them, run \_\_.~~
 
 ## References
 
