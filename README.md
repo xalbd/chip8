@@ -4,12 +4,13 @@ Chip-8 is a very small interpreted programming language developed in the 70s. I'
 
 ## To-do List
 
-- [ ] Implement opcode parser
-- [ ] Strengthen integer typing checks (bitsets everywhere?)
+- [x] Implement opcode parser
+- [x] Console-based display (ASCII) + basic debugging data
+- [ ] Strengthen integer typing checks
 - [ ] Implement SDL for display
-- [ ] Add debugging mode (live dissasembly, registers, RAM)
 - [ ] Implement input
-- [ ] Test all opcodes
+- [ ] Test all opcodes thoroughly
+- [ ] Add debugging mode (live dissasembly, registers, RAM)
 - [ ] Implement sound (coupled to main loop timing)
 - [ ] Slightly more accurate timings for opcodes
 

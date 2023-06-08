@@ -3,16 +3,19 @@
 
 #include <cstdint>
 
+const int SCREEN_WIDTH = 64;
+const int SCREEN_HEIGHT = 32;
+
 class Display {
    public:
     Display();
     ~Display();
     void printStd();
     void clear();
-    bool toggle(u_int8_t x, u_int8_t y);
+    bool toggle(u_int8_t row, u_int8_t col);
 
    private:
-    uint64_t screen[32] = {};
+    uint64_t screen[SCREEN_HEIGHT] = {};
 };
 
 #endif

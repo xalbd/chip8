@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <string>
 
-const int CYCLE_LEN_MS = 5;
+const int CYCLE_LEN_MS = 1;
 const u_int16_t START_ADDRESS = 0x200;
 const u_int16_t FONT_START_ADDRESS = 0x50;
 const int FONT_HEIGHT = 5;
@@ -39,22 +39,23 @@ class Chip8 {
    private:
     void loadROM(std::string romFile);
     void cycle();
+    void printStatus();
 
-    u_int8_t ram[4096] = {};
-    u_int8_t reg[16] = {};
-    u_int16_t stack[16] = {};
-    u_int16_t index = 0;
-    u_int16_t pc = 0;
-    u_int8_t sp = -1;  // TODO: need to check stack
+    uint8_t ram[4096] = {};
+    uint8_t reg[16] = {};
+    uint16_t stack[16] = {};
+    uint16_t index = 0;
+    uint16_t pc = 0;
+    uint8_t sp = 0;
 
-    u_int8_t delayTimer = 0;
-    u_int8_t soundTimer = 0;
+    uint8_t delayTimer = 0;
+    uint8_t soundTimer = 0;
 
     Display* display;
 
-    u_int16_t opcode;
-    u_int8_t x, y;
-    u_int16_t addr, imm;
+    uint16_t opcode;
+    uint8_t x, y;
+    uint16_t addr, imm;
     void parseInstruction();
 
     void runInstruction();

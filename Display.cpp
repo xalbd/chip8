@@ -8,9 +8,10 @@ Display::Display() {}
 Display::~Display() {}
 
 void Display::printStd() {
-    for (auto line : screen) {
-        std::cout << std::bitset<64>(line) << std::endl;
+    for (auto& line : screen) {
+        std::cout << std::bitset<64>(line).to_string('.', 'x') << std::endl;
     }
+    std::cout << std::endl;
 }
 
 void Display::clear() {
@@ -19,9 +20,14 @@ void Display::clear() {
     }
 }
 
-bool Display::toggle(u_int8_t x, u_int8_t y) {
-    u_int64_t mask = 1;
-    bool toggled = screen[y] & mask << (63 - y);
-    screen[x] ^= mask << (63 - y);
+bool Display::toggle(u_int8_t row, u_int8_t col) {
+    col %= SCREEN_WIDTH;
+    row %= SCREEN_HEIGHT;
+
+    uint64_t mask = 1;
+    mask <<= (SCREEN_WIDTH - 1 - col);
+
+    bool toggled = screen[row] & mask;
+    screen[row] ^= mask;
     return toggled;
 }
