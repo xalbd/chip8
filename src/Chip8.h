@@ -30,6 +30,8 @@ const u_int8_t FONT[FONT_MEMSIZE] = {
 const int SCREEN_WIDTH = 64;
 const int SCREEN_HEIGHT = 32;
 
+class Display;
+
 class Chip8 {
    public:
     Chip8(std::string romFile);
@@ -60,6 +62,8 @@ class Chip8 {
     void printStd();
     void clear();
     bool toggle(u_int8_t row, u_int8_t col);
+
+    Display* display;
 
     void runInstruction();
     void op_00e0();

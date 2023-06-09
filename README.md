@@ -24,11 +24,14 @@ Every instruction in Chip-8 is two bytes long. Because Chip-8 is an interpreted 
 
 ## Compiling and Running
 
-Requires C++17, make, and ~~SDL2~~.
+Requires C++17, cmake, and SDL2. Run these commands from the source directory.
 
 ```
-$ make
-$ ./run
+$ mkdir build
+$ cd build
+$ cmake ..
+$ cmake --build .
+$ ./chip8
 ```
 
 ~~The keys of the Chip-8, 0-9 and A-F are mapped to \_\_ for user interaction.~~

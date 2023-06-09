@@ -6,9 +6,12 @@
 
 #include "Display.h"
 
-Chip8::Chip8(std::string romFile) { loadROM(romFile); }
+Chip8::Chip8(std::string romFile) {
+    loadROM(romFile);
+    display = new Display();
+}
 
-Chip8::~Chip8() {}
+Chip8::~Chip8() { delete display; }
 
 void Chip8::run() {
     auto time = std::chrono::high_resolution_clock::now();

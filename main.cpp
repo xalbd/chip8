@@ -1,7 +1,6 @@
 #include "Chip8.h"
-#include "Display.h"
 
 int main() {
-    Chip8 c("testraw");
+    Chip8 c("testrom");
     c.run();
 }
