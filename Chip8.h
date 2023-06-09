@@ -27,8 +27,8 @@ const u_int8_t FONT[FONT_MEMSIZE] = {
     0xF0, 0x80, 0xF0, 0x80, 0xF0,  // E
     0xF0, 0x80, 0xF0, 0x80, 0x80   // F
 };
-
-class Display;
+const int SCREEN_WIDTH = 64;
+const int SCREEN_HEIGHT = 32;
 
 class Chip8 {
    public:
@@ -51,12 +51,15 @@ class Chip8 {
     uint8_t delayTimer = 0;
     uint8_t soundTimer = 0;
 
-    Display* display;
-
     uint16_t opcode;
     uint8_t x, y;
     uint16_t addr, imm;
     void parseInstruction();
+
+    uint64_t screen[SCREEN_HEIGHT] = {};
+    void printStd();
+    void clear();
+    bool toggle(u_int8_t row, u_int8_t col);
 
     void runInstruction();
     void op_00e0();
