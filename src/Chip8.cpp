@@ -14,13 +14,29 @@ Chip8::Chip8(std::string romFile) {
 Chip8::~Chip8() { delete display; }
 
 void Chip8::run() {
+    bool running = true;
+    int delayTimerTicks = 0, soundTimerTicks = 0;
     auto time = std::chrono::high_resolution_clock::now();
-    while (true) {
+
+    while (running) {
+        display->processEvents(keys, running);
         auto now = std::chrono::high_resolution_clock::now();
-        if (now - time > std::chrono::milliseconds(150)) {
+        if (std::chrono::duration<float, std::chrono::microseconds::period>(now - time).count() >
+            CYCLE_LEN_MICROSECONDS) {
+            if (delayTimerTicks == 0 && delayTimer != 0) {
+                delayTimer--;
+                delayTimerTicks = TIMER_TICKS;
+            } else if (delayTimerTicks > 0)
+                delayTimerTicks--;
+            if (soundTimerTicks == 0 && delayTimer != 0) {
+                delayTimer--;
+                soundTimerTicks = TIMER_TICKS;
+            } else if (soundTimerTicks > 0)
+                soundTimerTicks--;
             time = now;
             cycle();  // delay
-            printStd();
+            // printStd();
+            display->refreshDisplay(screen);
         }
     }
 }
@@ -55,7 +71,7 @@ void Chip8::loadROM(std::string romFile) {
 void Chip8::cycle() {
     // read opcode
     opcode = (ram[pc] << 8) + ram[pc + 1];
-    printStatus();
+    // printStatus();
     pc += 2;
 
     // interpret
@@ -80,26 +96,22 @@ void Chip8::parseInstruction() {
 }
 
 void Chip8::printStd() {
-    for (auto& line : screen) {
-        std::cout << std::bitset<64>(line).to_string('.', 'x') << std::endl;
+    for (int i = 0; i < SCREEN_HEIGHT; i++) {
+        for (int j = 0; j < SCREEN_WIDTH; j++) {
+            if (screen[i * SCREEN_WIDTH + j] != 0)
+                std::cout << "x";
+            else
+                std::cout << ".";
+        }
+        std::cout << std::endl;
     }
     std::cout << std::endl;
-}
-
-void Chip8::clear() {
-    for (auto& line : screen) {
-        line = 0;
-    }
 }
 
 bool Chip8::toggle(u_int8_t row, u_int8_t col) {
     col %= SCREEN_WIDTH;
     row %= SCREEN_HEIGHT;
 
-    uint64_t mask = 1;
-    mask <<= (SCREEN_WIDTH - 1 - col);
-
-    bool toggled = screen[row] & mask;
-    screen[row] ^= mask;
-    return toggled;
+    screen[row * SCREEN_WIDTH + col] = ~screen[row * SCREEN_WIDTH + col];
+    return screen[row * SCREEN_WIDTH + col] == 0;
 }

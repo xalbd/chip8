@@ -4,7 +4,8 @@
 #include <cstdint>
 #include <string>
 
-const int CYCLE_LEN_MS = 1;
+const int CYCLE_LEN_MICROSECONDS = 1300;
+const int TIMER_TICKS = 16670 / CYCLE_LEN_MICROSECONDS;
 const u_int16_t START_ADDRESS = 0x200;
 const u_int16_t FONT_START_ADDRESS = 0x50;
 const int FONT_HEIGHT = 5;
@@ -49,6 +50,7 @@ class Chip8 {
     uint16_t index = 0;
     uint16_t pc = 0;
     uint8_t sp = 0;
+    bool keys[16] = {};
 
     uint8_t delayTimer = 0;
     uint8_t soundTimer = 0;
@@ -58,9 +60,8 @@ class Chip8 {
     uint16_t addr, imm;
     void parseInstruction();
 
-    uint64_t screen[SCREEN_HEIGHT] = {};
+    uint32_t screen[SCREEN_HEIGHT * SCREEN_WIDTH] = {};
     void printStd();
-    void clear();
     bool toggle(u_int8_t row, u_int8_t col);
 
     Display* display;

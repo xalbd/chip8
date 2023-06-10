@@ -1,3 +1,5 @@
+#include <random>
+
 #include "Chip8.h"
 
 void Chip8::runInstruction() {
@@ -118,7 +120,7 @@ void Chip8::runInstruction() {
 }
 
 // clear display
-void Chip8::op_00e0() { clear(); }
+void Chip8::op_00e0() { memset(screen, 0, sizeof(screen)); }
 
 // return
 void Chip8::op_00ee() {
@@ -172,33 +174,37 @@ void Chip8::op_8xy3() { reg[x] ^= reg[y]; }
 
 // Vx += Vy, VF = carry
 void Chip8::op_8xy4() {
-    int total = reg[x] + reg[y];
-    reg[0xF] = total > 255;
+    bool carry = 255 < reg[x] + reg[y];
     reg[x] += reg[y];
+    reg[0xF] = carry;
 }
 
 // Vx -= Vy, VF = not borrow
 void Chip8::op_8xy5() {
-    reg[0xF] = reg[x] > reg[y];
+    bool notborrow = reg[x] > reg[y];
     reg[x] -= reg[y];
+    reg[0xF] = notborrow;
 }
 
 // Vx = Vy >> 1, VF = original LSB
 void Chip8::op_8xy6() {
-    reg[0xF] = reg[y] & 1;
+    bool lsb = reg[y] & 1;
     reg[x] = reg[y] >> 1;
+    reg[0xF] = lsb;
 }
 
 // Vx = Vy - Vx, VF = not borrow
 void Chip8::op_8xy7() {
-    reg[0xF] = reg[y] > reg[x];
+    bool notborrow = reg[y] > reg[x];
     reg[x] = reg[y] - reg[x];
+    reg[0xF] = notborrow;
 }
 
 // Vx = Vy << 1, VF = original MSB
 void Chip8::op_8xyE() {
-    reg[0xF] = reg[y] >> 0xF;
+    bool msb = reg[y] >> 7;
     reg[x] = reg[y] << 1;
+    reg[0xF] = msb;
 }
 
 // skip if Vx != Vy
@@ -207,13 +213,18 @@ void Chip8::op_9xy0() {
 }
 
 // index = nnn
-void Chip8::op_Annn() { index = imm; }
+void Chip8::op_Annn() { index = addr; }
 
 // jump to nnn + V0
-void Chip8::op_Bnnn() { pc = imm + reg[0x0]; }
+void Chip8::op_Bnnn() { pc = addr + reg[0x0]; }
 
 // Vx = random byte & kk
-void Chip8::op_Cxkk() { return; }
+void Chip8::op_Cxkk() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distr(0, 0xFF);
+    reg[x] = distr(gen);
+}
 
 // display sprite @ location index at (Vx, Vy), set VF = collision
 void Chip8::op_Dxyn() {
@@ -229,16 +240,29 @@ void Chip8::op_Dxyn() {
 }
 
 // skip if key Vx is pressed
-void Chip8::op_Ex9E() { return; }
+void Chip8::op_Ex9E() {
+    if (keys[reg[x]]) pc += 2;
+}
 
 // skip if key Vx is not pressed
-void Chip8::op_ExA1() { return; }
+void Chip8::op_ExA1() {
+    if (!keys[reg[x]]) pc += 2;
+}
 
 // Vx = delayTimer
 void Chip8::op_Fx07() { reg[x] = delayTimer; }
 
 // wait for key, Vx = key
-void Chip8::op_Fx0A() { return; }
+void Chip8::op_Fx0A() {
+    for (int i = 0; i < 16; i++) {
+        if (keys[i]) {
+            reg[x] = i;
+            return;
+        }
+    }
+
+    pc -= 2;
+}
 
 // delayTimer = Vx
 void Chip8::op_Fx15() { delayTimer = reg[x]; }
@@ -261,14 +285,14 @@ void Chip8::op_Fx33() {
 
 // ram[index ... index + x] = V0 ... Vx
 void Chip8::op_Fx55() {
-    for (int i = 0; i < x; i++) {
+    for (int i = 0; i <= x; i++) {
         ram[index + i] = reg[i];
     }
 }
 
 // V0 ... Vx = ram[index ... index + x]
 void Chip8::op_Fx65() {
-    for (int i = 0; i < x; i++) {
+    for (int i = 0; i <= x; i++) {
         reg[i] = ram[index + i];
     }
 }

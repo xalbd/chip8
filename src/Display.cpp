@@ -5,33 +5,142 @@
 #include <iostream>
 
 Display::Display() {
-    SDL_Window* window = nullptr;
-    SDL_Surface* screenSurface = nullptr;
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        std::cout << "SDL could not be initialized. Error: " << SDL_GetError() << std::endl;
-    } else {
-        window = SDL_CreateWindow("Chip-8", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                                  DISPLAY_WIDTH, DISPLAY_HEIGHT, SDL_WINDOW_SHOWN);
-        if (window == nullptr) {
-            std::cout << "Window could not be created. Error: " << SDL_GetError() << std::endl;
-        } else {
-            screenSurface = SDL_GetWindowSurface(window);
-            SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
-            SDL_UpdateWindowSurface(window);
-            SDL_Event e;
-            bool quit = false;
-            while (quit == false) {
-                while (SDL_PollEvent(&e)) {
-                    if (e.type == SDL_QUIT) quit = true;
-                }
+    SDL_Init(SDL_INIT_VIDEO);
+    window = SDL_CreateWindow("Chip-8", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                              TEXTURE_WIDTH * DISPLAY_SCALING, TEXTURE_HEIGHT * DISPLAY_SCALING,
+                              SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING,
+                                TEXTURE_WIDTH, TEXTURE_HEIGHT);
+    SDL_ShowWindow(window);
+}
+
+Display::~Display() {
+    SDL_DestroyTexture(texture);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+}
+
+void Display::refreshDisplay(void* const screen) {
+    int pitch = 4 * TEXTURE_WIDTH;  // accounts for RGBA channels
+    SDL_UpdateTexture(texture, NULL, screen, pitch);
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
+    SDL_RenderPresent(renderer);
+}
+
+void Display::processEvents(bool* keys, bool& running) {
+    SDL_Event e;
+
+    while (SDL_PollEvent(&e)) {
+        if (e.type == SDL_QUIT) {
+            running = false;
+        } else if (e.type == SDL_KEYDOWN) {
+            switch (e.key.keysym.sym) {
+                case SDLK_1:
+                    keys[0x1] = true;
+                    break;
+                case SDLK_2:
+                    keys[0x2] = true;
+                    break;
+                case SDLK_3:
+                    keys[0x3] = true;
+                    break;
+                case SDLK_q:
+                    keys[0x4] = true;
+                    break;
+                case SDLK_w:
+                    keys[0x5] = true;
+                    break;
+                case SDLK_e:
+                    keys[0x6] = true;
+                    break;
+                case SDLK_a:
+                    keys[0x7] = true;
+                    break;
+                case SDLK_s:
+                    keys[0x8] = true;
+                    break;
+                case SDLK_d:
+                    keys[0x9] = true;
+                    break;
+                case SDLK_x:
+                    keys[0x0] = true;
+                    break;
+                case SDLK_z:
+                    keys[0xA] = true;
+                    break;
+                case SDLK_c:
+                    keys[0xB] = true;
+                    break;
+                case SDLK_4:
+                    keys[0xC] = true;
+                    break;
+                case SDLK_r:
+                    keys[0xD] = true;
+                    break;
+                case SDLK_f:
+                    keys[0xE] = true;
+                    break;
+                case SDLK_v:
+                    keys[0xF] = true;
+                    break;
+                case SDLK_ESCAPE:
+                    running = false;
+                    break;
             }
-
-            SDL_DestroyWindow(window);
-
-            // Quit SDL subsystems
-            SDL_Quit();
+        } else if (e.type == SDL_KEYUP) {
+            switch (e.key.keysym.sym) {
+                case SDLK_1:
+                    keys[0x1] = false;
+                    break;
+                case SDLK_2:
+                    keys[0x2] = false;
+                    break;
+                case SDLK_3:
+                    keys[0x3] = false;
+                    break;
+                case SDLK_q:
+                    keys[0x4] = false;
+                    break;
+                case SDLK_w:
+                    keys[0x5] = false;
+                    break;
+                case SDLK_e:
+                    keys[0x6] = false;
+                    break;
+                case SDLK_a:
+                    keys[0x7] = false;
+                    break;
+                case SDLK_s:
+                    keys[0x8] = false;
+                    break;
+                case SDLK_d:
+                    keys[0x9] = false;
+                    break;
+                case SDLK_x:
+                    keys[0x0] = false;
+                    break;
+                case SDLK_z:
+                    keys[0xA] = false;
+                    break;
+                case SDLK_c:
+                    keys[0xB] = false;
+                    break;
+                case SDLK_4:
+                    keys[0xC] = false;
+                    break;
+                case SDLK_r:
+                    keys[0xD] = false;
+                    break;
+                case SDLK_f:
+                    keys[0xE] = false;
+                    break;
+                case SDLK_v:
+                    keys[0xF] = false;
+                    break;
+            }
         }
     }
 }
-
-Display::~Display() {}

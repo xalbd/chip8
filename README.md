@@ -13,12 +13,13 @@ Every instruction in Chip-8 is two bytes long. Because Chip-8 is an interpreted 
 - [x] Implement opcode parser
 - [x] Console-based display (ASCII) + basic debugging data
 - [ ] Strengthen integer typing checks
-- [ ] Implement SDL for display
-- [ ] Implement input
+- [x] Implement SDL for display
+- [x] Implement input
 - [ ] Test all opcodes thoroughly
-- [ ] Add debugging mode (live dissasembly, registers, RAM)
+- [ ] Command line arguments for refresh rate, ROM selection
+- [x] Implement accurate-ish 60Hz timer
+- [ ] Add debugging mode (live dissasembly, registers, RAM) to SDL output
 - [ ] Implement sound (coupled to main loop timing)
-- [ ] Slightly more accurate timings for opcodes
 - [ ] Toggles for differences in Chip-8 specifications/implementations
 - [ ] Illegal opcodes
 
@@ -34,11 +35,10 @@ $ cmake --build .
 $ ./chip8
 ```
 
-~~The keys of the Chip-8, 0-9 and A-F are mapped to \_\_ for user interaction.~~
-
-~~Open-source ROMs are included in this repository. To run them, run \_\_.~~
+The keys of the Chip-8 are mapped to 1-4, Q-R, A-F, and Z-V for user interaction.
 
 ## References
 
 - http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
 - https://github.com/mattmikolay/chip-8/wiki/Mastering-CHIP-8
+- https://github.com/Timendus/chip8-test-suite
