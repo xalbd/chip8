@@ -4,7 +4,9 @@ const int SCREEN_WIDTH = 64;
 const int SCREEN_HEIGHT = 32;
 const int DISPLAY_SCALING = 10;
 
-const int CYCLE_LEN_MICROSECONDS = 2000;
+const int CYCLE_LEN_MICROSECONDS = 1500;
+
+// approximates number of cycles needed to run delay/sound timers at 60Hz
 const int TIMER_TICKS = 16670 / CYCLE_LEN_MICROSECONDS;
 
 const u_int16_t START_ADDRESS = 0x200;

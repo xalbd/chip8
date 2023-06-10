@@ -12,16 +12,15 @@ Every instruction in Chip-8 is two bytes long. Because Chip-8 is an interpreted 
 
 - [x] Implement opcode parser
 - [x] Console-based display (ASCII) + basic debugging data
-- [ ] Strengthen integer typing checks
 - [x] Implement SDL for display
 - [x] Implement input
-- [ ] Test all opcodes thoroughly
+- [x] Test all opcodes thoroughly
+- [ ] Fix implementation based quirks (base Chip-8)
 - [ ] Command line arguments for refresh rate, ROM selection
 - [x] Implement accurate-ish 60Hz timer
-- [ ] Add debugging mode (live dissasembly, registers, RAM) to SDL output
+- [ ] Add debugging (live dissasembly, registers, RAM) to SDL output
 - [ ] Implement sound (coupled to main loop timing)
-- [ ] Toggles for differences in Chip-8 specifications/implementations
-- [ ] Illegal opcodes
+- [ ] Toggles for differences in Chip-8 specifications/implementations (SCHIP, XO-Chip)
 
 ## Compiling and Running
 

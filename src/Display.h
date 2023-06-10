@@ -6,7 +6,7 @@ class Display {
    public:
     Display();
     ~Display();
-    void processEvents(bool* keys, bool& running);
+    bool processEvents(bool* keys);
     void refreshDisplay(void* const screen);
 
    private:

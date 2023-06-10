@@ -17,7 +17,6 @@ class Chip8 {
    private:
     void loadROM(std::string romFile);
     void cycle();
-    void printStatus();
 
     uint8_t ram[4096] = {};
     uint8_t reg[16] = {};
@@ -36,7 +35,6 @@ class Chip8 {
     void parseInstruction();
 
     uint32_t screen[SCREEN_HEIGHT * SCREEN_WIDTH] = {};
-    void printStd();
     bool toggle(u_int8_t row, u_int8_t col);
 
     Display* display;

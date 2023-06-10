@@ -14,26 +14,30 @@ Chip8::Chip8(std::string romFile) {
 Chip8::~Chip8() { delete display; }
 
 void Chip8::run() {
-    bool running = true;
     int delayTimerTicks = 0, soundTimerTicks = 0;
-    auto time = std::chrono::high_resolution_clock::now();
 
-    while (running) {
-        display->processEvents(keys, running);
-        auto now = std::chrono::high_resolution_clock::now();
-        if (std::chrono::duration<float, std::chrono::microseconds::period>(now - time).count() >
-            CYCLE_LEN_MICROSECONDS) {
+    auto time = std::chrono::high_resolution_clock::now();
+    auto now = time;
+    const auto tickdiff = std::chrono::microseconds(CYCLE_LEN_MICROSECONDS);
+
+    while (display->processEvents(keys)) {
+        now = std::chrono::high_resolution_clock::now();
+        if (now - time >= tickdiff) {
             time = now;
+
             if (delayTimerTicks == 0 && delayTimer != 0) {
                 delayTimer--;
                 delayTimerTicks = TIMER_TICKS;
-            } else if (delayTimerTicks > 0)
+            } else if (delayTimerTicks > 0) {
                 delayTimerTicks--;
-            if (soundTimerTicks == 0 && delayTimer != 0) {
-                delayTimer--;
+            }
+
+            if (soundTimerTicks == 0 && soundTimer != 0) {
+                soundTimer--;
                 soundTimerTicks = TIMER_TICKS;
-            } else if (soundTimerTicks > 0)
+            } else if (soundTimerTicks > 0) {
                 soundTimerTicks--;
+            }
 
             cycle();
         }
@@ -80,33 +84,11 @@ void Chip8::cycle() {
     display->refreshDisplay(screen);
 }
 
-void Chip8::printStatus() {
-    using namespace std;
-    cout << hex << (int)pc << ": " << (int)opcode << endl << "reg- ";
-    for (int i = 0; i < 16; i++) cout << hex << i << ":" << (int)reg[i] << " ";
-    cout << endl << hex << "i- " << index << endl << "stack- ";
-    for (int i = 0; i < sp; i++) cout << hex << (int)stack[i] << " ";
-    cout << endl;
-}
-
 void Chip8::parseInstruction() {
     x = (opcode & 0xF00) >> 8;
     y = (opcode & 0xF0) >> 4;
     imm = opcode & 0xFF;
     addr = opcode & 0xFFF;
-}
-
-void Chip8::printStd() {
-    for (int i = 0; i < SCREEN_HEIGHT; i++) {
-        for (int j = 0; j < SCREEN_WIDTH; j++) {
-            if (screen[i * SCREEN_WIDTH + j] != 0)
-                std::cout << "x";
-            else
-                std::cout << ".";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
 }
 
 bool Chip8::toggle(u_int8_t row, u_int8_t col) {
