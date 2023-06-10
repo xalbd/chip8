@@ -23,6 +23,7 @@ void Chip8::run() {
         auto now = std::chrono::high_resolution_clock::now();
         if (std::chrono::duration<float, std::chrono::microseconds::period>(now - time).count() >
             CYCLE_LEN_MICROSECONDS) {
+            time = now;
             if (delayTimerTicks == 0 && delayTimer != 0) {
                 delayTimer--;
                 delayTimerTicks = TIMER_TICKS;
@@ -33,10 +34,8 @@ void Chip8::run() {
                 soundTimerTicks = TIMER_TICKS;
             } else if (soundTimerTicks > 0)
                 soundTimerTicks--;
-            time = now;
-            cycle();  // delay
-            // printStd();
-            display->refreshDisplay(screen);
+
+            cycle();
         }
     }
 }
@@ -71,12 +70,14 @@ void Chip8::loadROM(std::string romFile) {
 void Chip8::cycle() {
     // read opcode
     opcode = (ram[pc] << 8) + ram[pc + 1];
-    // printStatus();
     pc += 2;
 
     // interpret
     parseInstruction();
     runInstruction();
+
+    // update
+    display->refreshDisplay(screen);
 }
 
 void Chip8::printStatus() {

@@ -2,16 +2,16 @@
 
 #include <SDL2/SDL.h>
 
-#include <iostream>
+#include "Constants.h"
 
 Display::Display() {
     SDL_Init(SDL_INIT_VIDEO);
     window = SDL_CreateWindow("Chip-8", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                              TEXTURE_WIDTH * DISPLAY_SCALING, TEXTURE_HEIGHT * DISPLAY_SCALING,
+                              SCREEN_WIDTH * DISPLAY_SCALING, SCREEN_HEIGHT * DISPLAY_SCALING,
                               SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING,
-                                TEXTURE_WIDTH, TEXTURE_HEIGHT);
+                                SCREEN_WIDTH, SCREEN_HEIGHT);
     SDL_ShowWindow(window);
 }
 
@@ -23,7 +23,7 @@ Display::~Display() {
 }
 
 void Display::refreshDisplay(void* const screen) {
-    int pitch = 4 * TEXTURE_WIDTH;  // accounts for RGBA channels
+    int pitch = 4 * SCREEN_WIDTH;  // accounts for RGBA channels
     SDL_UpdateTexture(texture, NULL, screen, pitch);
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
