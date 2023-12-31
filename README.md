@@ -8,20 +8,15 @@ Chip-8 has 16 16-bit general registers, 4kb of memory, interfaces through the us
 
 Every instruction in Chip-8 is two bytes long. Because Chip-8 is an interpreted language and not machine code, it is near-impossible to create a cycle-accurate emulation. Typically, each opcode is simply executed after a small delay in order to create roughly acccurate timings (as does this emulator).
 
+## Pong
+
+Note that the flickering/wraparound behavior is from the ROM used here, not from the implementation.
+
+https://github.com/xalbd/chip8/assets/119540449/3fea38e8-5326-4a69-b1e7-ca84938ddbcc
+
 ## Implementation Notes
 
 More modern versions of Chip-8 like SChip and Chip-XO add extra instructions or modify the behavior of existing ones. This interpreter is based off of the implementation and quirks of the original Chip-8 interpreter, and as such, many modern programs will not run correctly.
-
-## To-do List
-
-- [x] Implement opcode parser
-- [x] Console-based display (ASCII) + basic debugging data
-- [x] Implement SDL for display
-- [x] Implement input
-- [x] Test all opcodes thoroughly
-- [ ] Fix base Chip-8 implementation quirks
-- [ ] Command line arguments for refresh rate, ROM selection
-- [x] Implement accurate-ish 60Hz timer
 
 ## Compiling and Running
 
