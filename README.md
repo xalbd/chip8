@@ -12,7 +12,7 @@ Every instruction in Chip-8 is two bytes long. Because Chip-8 is an interpreted 
 
 Note that the flickering/wraparound behavior is from the ROM used here, not from the implementation.
 
-https://github.com/xalbd/chip8/assets/119540449/3fea38e8-5326-4a69-b1e7-ca84938ddbcc
+https://github.com/xalbd/chip8/assets/119540449/e1e9c730-0ca3-4008-a367-0c59221e80d3
 
 ## Implementation Notes
 
